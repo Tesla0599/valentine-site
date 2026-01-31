@@ -43,7 +43,7 @@
     p {
       color: #555;
       font-size: 16px;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
     }
 
     #taunt {
@@ -53,6 +53,11 @@
       margin-bottom: 20px;
     }
 
+    .button-area {
+      position: relative;
+      margin-top: 20px;
+    }
+
     button {
       font-size: 16px;
       padding: 12px 26px;
@@ -60,6 +65,9 @@
       border: none;
       cursor: pointer;
       user-select: none;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     #yes {
@@ -76,9 +84,6 @@
       position: absolute;
       background-color: #4da3ff;
       color: white;
-      top: 160px;            /* starts below YES */
-      left: 50%;
-      transform: translateX(-50%);
     }
 
     .heart {
@@ -107,11 +112,12 @@
   <div class="card">
     <h1>Aditi 💖</h1>
     <p>Will you be my Valentine?</p>
-
     <div id="taunt"></div>
 
-    <button id="yes">Yes 💕</button>
-    <button id="no">No 🙈</button>
+    <div class="button-area">
+      <button id="yes">Yes 💕</button>
+      <button id="no">No 🙈</button>
+    </div>
   </div>
 
   <script>
@@ -130,34 +136,50 @@
       "Galat button madam 😂"
     ];
 
-    function showRandomTaunt() {
-      const index = Math.floor(Math.random() * taunts.length);
-      tauntBox.innerText = taunts[index];
+    function showTaunt() {
+      tauntBox.innerText =
+        taunts[Math.floor(Math.random() * taunts.length)];
     }
 
-    function moveNoButton() {
+    function placeNoBelowYes() {
+      const yesRect = yesBtn.getBoundingClientRect();
+      const cardRect = card.getBoundingClientRect();
+
+      const left =
+        yesRect.left - cardRect.left +
+        yesRect.width / 2 -
+        noBtn.offsetWidth / 2;
+
+      const top =
+        yesRect.top - cardRect.top +
+        yesRect.height +
+        12;
+
+      noBtn.style.left = left + "px";
+      noBtn.style.top = top + "px";
+    }
+
+    function moveNo() {
       const cardRect = card.getBoundingClientRect();
       const btnRect = noBtn.getBoundingClientRect();
 
       const maxX = cardRect.width - btnRect.width;
       const maxY = cardRect.height - btnRect.height - 20;
 
-      const x = Math.random() * maxX;
-      const y = Math.random() * maxY;
+      noBtn.style.left = Math.random() * maxX + "px";
+      noBtn.style.top = Math.random() * maxY + "px";
 
-      noBtn.style.left = x + "px";
-      noBtn.style.top = y + "px";
-
-      showRandomTaunt();
+      showTaunt();
     }
 
-    // Run away when touched or clicked
+    // Initial correct placement
+    window.addEventListener("load", placeNoBelowYes);
+
     noBtn.addEventListener("pointerdown", function (e) {
       e.preventDefault();
-      moveNoButton();
+      moveNo();
     });
 
-    // Run away when finger/mouse gets close
     document.addEventListener(
       "pointermove",
       function (e) {
@@ -167,13 +189,12 @@
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < 120) {
-          moveNoButton();
+          moveNo();
         }
       },
       { passive: false }
     );
 
-    // YES button success screen
     yesBtn.addEventListener("click", function () {
       document.body.innerHTML = `
         <div style="
@@ -192,19 +213,15 @@
       `;
     });
 
-    // Floating hearts animation
     setInterval(function () {
       const heart = document.createElement("div");
       heart.className = "heart";
       heart.innerText = "💖";
       heart.style.left = Math.random() * 100 + "vw";
       heart.style.fontSize = Math.random() * 20 + 16 + "px";
-
       document.body.appendChild(heart);
 
-      setTimeout(function () {
-        heart.remove();
-      }, 5000);
+      setTimeout(() => heart.remove(), 5000);
     }, 300);
   </script>
 
