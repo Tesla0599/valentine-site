@@ -7,4 +7,64 @@
 
 <button id="no">No 🙈</button>
 
-<script> const noBtn = document.getElementById("no"); const yesBtn = document.getElementById("yes"); const tauntBox = document.getElementById("taunt"); const moveSound = document.getElementById("moveSound"); const yesSound = document.getElementById("yesSound"); const taunts = [ "I think yes 😏 tumne galat dabaya hai", "Arre arre 😂 NO ka option hi nahi hai", "Oops! Phir se miss ho gaya 🙈", "Aditi… YES hi likha tha 😌", "Phone bhi chahta hai tum YES dabao 💖", "Nice try 😜 but NO is scared", "Galat button madam 😂" ]; function showTaunt() { const msg = taunts[Math.floor(Math.random() * taunts.length)]; tauntBox.innerText = msg; } function moveNoButton() { const maxX = window.innerWidth - noBtn.offsetWidth; const maxY = window.innerHeight - noBtn.offsetHeight; const x = Math.random() * maxX; const y = Math.random() * maxY; noBtn.style.left = x + "px"; noBtn.style.top = y + "px"; moveSound.currentTime = 0; moveSound.play(); showTaunt(); } // Initial position moveNoButton(); // Escape on touch/click noBtn.addEventListener("touchstart", function(e) { e.preventDefault(); moveNoButton(); }); noBtn.addEventListener("mousedown", function(e) { e.preventDefault(); moveNoButton(); }); // Infinite escape when finger comes close document.addEventListener("touchmove", function(e) { const touch = e.touches[0]; if (!touch) return; const rect = noBtn.getBoundingClientRect(); const dx = touch.clientX - (rect.left + rect.width / 2); const dy = touch.clientY - (rect.top + rect.height / 2); const distance = Math.sqrt(dx * dx + dy * dy); if (distance < 120) { moveNoButton(); } }); yesBtn.addEventListener("click", function () { yesSound.play(); document.body.innerHTML = '<div style="height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;font-family:Comic Sans MS, cursive;background:linear-gradient(135deg,#ff9a9e,#fad0c4);"><h1 style="color:#ff4d6d;">YAYYY ADITI!! 💖🥰</h1><p style="font-size:18px;">Best decision ever ❤️</p></div>'; }); setInterval(function () { const heart = document.createElement("div"); heart.className = "heart"; heart.innerText = "💖"; heart.style.left = Math.random() * 100 + "vw"; heart.style.fontSize = Math.random() * 20 + 16 + "px"; document.body.appendChild(heart); setTimeout(() => heart.remove(), 5000); }, 300); </script> </body> </html>
+<script>
+  const noBtn = document.getElementById("no");
+  const yesBtn = document.getElementById("yes");
+  const tauntBox = document.getElementById("taunt");
+
+  const taunts = [
+    "I think YES 😏 tumne galat dabaya hai",
+    "Arre arre 😂 NO allowed nahi hai",
+    "Oops 🙈 phir se miss",
+    "Aditi… YES try karo 💖",
+    "Phone bhi YES chahta hai 😌",
+    "Nice try 😜"
+  ];
+
+  function randomTaunt() {
+    tauntBox.innerText = taunts[Math.floor(Math.random() * taunts.length)];
+  }
+
+  function moveNo() {
+    const maxX = window.innerWidth - noBtn.offsetWidth;
+    const maxY = window.innerHeight - noBtn.offsetHeight;
+
+    noBtn.style.left = Math.random() * maxX + "px";
+    noBtn.style.top = Math.random() * maxY + "px";
+
+    randomTaunt();
+  }
+
+  // IMPORTANT: force initial position
+  noBtn.style.position = "fixed";
+  moveNo();
+
+  // Runs away on tap / click
+  noBtn.addEventListener("pointerdown", function (e) {
+    e.preventDefault();
+    moveNo();
+  });
+
+  // Infinite escape when finger comes close
+  document.addEventListener(
+    "pointermove",
+    function (e) {
+      const rect = noBtn.getBoundingClientRect();
+      const dx = e.clientX - (rect.left + rect.width / 2);
+      const dy = e.clientY - (rect.top + rect.height / 2);
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < 120) {
+        moveNo();
+      }
+    },
+    { passive: false }
+  );
+
+  yesBtn.addEventListener("click", function () {
+    document.body.innerHTML =
+      '<div style="height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;font-family:Comic Sans MS, cursive;background:linear-gradient(135deg,#ff9a9e,#fad0c4);"><h1 style="color:#ff4d6d;">YAYYY ADITI!! 💖🥰</h1><p style="font-size:18px;">Best decision ever ❤️</p></div>';
+  });
+</script>
+</body>
+</html>
