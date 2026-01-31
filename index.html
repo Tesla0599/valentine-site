@@ -1,76 +1,212 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8" /> <meta name="viewport" content="width=device-width, initial-scale=1.0"/> <title>Aditi 💖 Be My Valentine</title> <style> * { box-sizing: border-box; } body { margin: 0; height: 100vh; font-family: "Comic Sans MS", "Poppins", cursive; background: linear-gradient(135deg, #ff9a9e, #fad0c4); display: flex; justify-content: center; align-items: center; overflow: hidden; } .card { background: white; width: 90%; max-width: 360px; padding: 30px 20px; border-radius: 20px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.25); z-index: 2; } h1 { color: #ff4d6d; font-size: 24px; margin-bottom: 10px; } p { color: #555; font-size: 15px; margin-bottom: 20px; } #taunt { min-height: 22px; color: #ff4d6d; font-size: 14px; margin-bottom: 15px; } button { font-size: 16px; padding: 12px 26px; border-radius: 30px; border: none; cursor: pointer; user-select: none; } #yes { background-color: #ff4d6d; color: white; } #yes:active { transform: scale(1.1); } #no {  position: fixed;
-  background-color: #4da3ff; /* blue */
-  color: white;
-  top: calc(50% + 90px);    /* below YES */
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3; } .heart { position: fixed; bottom: -20px; font-size: 20px; animation: floatUp 5s linear forwards; pointer-events: none; } @keyframes floatUp { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-120vh); opacity: 0; } } </style> </head> <body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aditi 💖 Be My Valentine</title>
 
-<audio id="moveSound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_1c9b9a2c6c.mp3" preload="auto"></audio>
-<audio id="yesSound" src="https://cdn.pixabay.com/audio/2022/08/04/audio_6d8f4b88c5.mp3" preload="auto"></audio>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-<div class="card"> <h1>Aditi 💖</h1> <p>Will you be my Valentine?</p> <div id="taunt"></div> <button id="yes">Yes 💕</button> </div>
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: "Comic Sans MS", "Poppins", cursive;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
 
-<button id="no">No 🙈</button>
+    .card {
+      background: #ffffff;
+      width: 92%;
+      height: 85vh;
+      max-width: 420px;
+      padding: 30px 20px;
+      border-radius: 24px;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
 
-<script>
-  const noBtn = document.getElementById("no");
-  const yesBtn = document.getElementById("yes");
-  const tauntBox = document.getElementById("taunt");
+    h1 {
+      color: #ff4d6d;
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
 
-  const taunts = [
-    "I think YES 😏 tumne galat dabaya hai",
-    "Arre arre 😂 NO allowed nahi hai",
-    "Oops 🙈 phir se miss",
-    "Aditi… YES try karo 💖",
-    "Phone bhi YES chahta hai 😌",
-    "Nice try 😜"
-  ];
+    p {
+      color: #555;
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
 
-  function randomTaunt() {
-    tauntBox.innerText = taunts[Math.floor(Math.random() * taunts.length)];
-  }
+    #taunt {
+      height: 24px;
+      font-size: 14px;
+      color: #ff4d6d;
+      margin-bottom: 20px;
+    }
 
-  function moveNo() {
-    const maxX = window.innerWidth - noBtn.offsetWidth;
-    const maxY = window.innerHeight - noBtn.offsetHeight;
+    button {
+      font-size: 16px;
+      padding: 12px 26px;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+    }
 
-    noBtn.style.left = Math.random() * maxX + "px";
-    noBtn.style.top = Math.random() * maxY + "px";
+    #yes {
+      background-color: #ff4d6d;
+      color: white;
+      margin-bottom: 16px;
+    }
 
-    randomTaunt();
-  }
+    #yes:active {
+      transform: scale(1.1);
+    }
 
-  // IMPORTANT: force initial position
-  noBtn.style.position = "fixed";
-  
+    #no {
+      position: absolute;
+      background-color: #4da3ff;
+      color: white;
+      top: 160px;            /* starts below YES */
+      left: 50%;
+      transform: translateX(-50%);
+    }
 
-  // Runs away on tap / click
-  noBtn.addEventListener("pointerdown", function (e) {
-    e.preventDefault();
-    moveNo();
-  });
+    .heart {
+      position: fixed;
+      bottom: -20px;
+      font-size: 20px;
+      animation: floatUp 5s linear forwards;
+      pointer-events: none;
+    }
 
-  // Infinite escape when finger comes close
-  document.addEventListener(
-    "pointermove",
-    function (e) {
-      const rect = noBtn.getBoundingClientRect();
-      const dx = e.clientX - (rect.left + rect.width / 2);
-      const dy = e.clientY - (rect.top + rect.height / 2);
-      const distance = Math.sqrt(dx * dx + dy * dy);
-
-      if (distance < 120) {
-        moveNo();
+    @keyframes floatUp {
+      from {
+        transform: translateY(0);
+        opacity: 1;
       }
-    },
-    { passive: false }
-  );
+      to {
+        transform: translateY(-120vh);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
 
-  yesBtn.addEventListener("click", function () {
-    document.body.innerHTML =
-      '<div style="height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;font-family:Comic Sans MS, cursive;background:linear-gradient(135deg,#ff9a9e,#fad0c4);"><h1 style="color:#ff4d6d;">YAYYY ADITI!! 💖🥰</h1><p style="font-size:18px;">Best decision ever ❤️</p></div>';
-  });
-</script>
+<body>
+
+  <div class="card">
+    <h1>Aditi 💖</h1>
+    <p>Will you be my Valentine?</p>
+
+    <div id="taunt"></div>
+
+    <button id="yes">Yes 💕</button>
+    <button id="no">No 🙈</button>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById("no");
+    const yesBtn = document.getElementById("yes");
+    const tauntBox = document.getElementById("taunt");
+    const card = document.querySelector(".card");
+
+    const taunts = [
+      "I think YES 😏 tumne galat dabaya hai",
+      "Arre arre 😂 NO allowed nahi hai",
+      "Oops 🙈 phir se miss",
+      "Aditi… YES try karo 💖",
+      "Phone bhi YES chahta hai 😌",
+      "Nice try 😜 but NO is shy",
+      "Galat button madam 😂"
+    ];
+
+    function showRandomTaunt() {
+      const index = Math.floor(Math.random() * taunts.length);
+      tauntBox.innerText = taunts[index];
+    }
+
+    function moveNoButton() {
+      const cardRect = card.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+
+      const maxX = cardRect.width - btnRect.width;
+      const maxY = cardRect.height - btnRect.height - 20;
+
+      const x = Math.random() * maxX;
+      const y = Math.random() * maxY;
+
+      noBtn.style.left = x + "px";
+      noBtn.style.top = y + "px";
+
+      showRandomTaunt();
+    }
+
+    // Run away when touched or clicked
+    noBtn.addEventListener("pointerdown", function (e) {
+      e.preventDefault();
+      moveNoButton();
+    });
+
+    // Run away when finger/mouse gets close
+    document.addEventListener(
+      "pointermove",
+      function (e) {
+        const rect = noBtn.getBoundingClientRect();
+        const dx = e.clientX - (rect.left + rect.width / 2);
+        const dy = e.clientY - (rect.top + rect.height / 2);
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < 120) {
+          moveNoButton();
+        }
+      },
+      { passive: false }
+    );
+
+    // YES button success screen
+    yesBtn.addEventListener("click", function () {
+      document.body.innerHTML = `
+        <div style="
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          font-family: Comic Sans MS, cursive;
+          background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        ">
+          <h1 style="color:#ff4d6d;">YAYYY ADITI!! 💖🥰</h1>
+          <p style="font-size:18px;">Best decision ever ❤️</p>
+        </div>
+      `;
+    });
+
+    // Floating hearts animation
+    setInterval(function () {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerText = "💖";
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = Math.random() * 20 + 16 + "px";
+
+      document.body.appendChild(heart);
+
+      setTimeout(function () {
+        heart.remove();
+      }, 5000);
+    }, 300);
+  </script>
+
 </body>
 </html>
